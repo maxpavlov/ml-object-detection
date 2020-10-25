@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Object Detection</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-resource"></script>
+    <style>
+        body {
+            background-color: #e2e2e2;
+        }
+
+        #app {
+            padding: 20px;
+        }
+
+        #preview {
+            -display: flex;
+            -justify-content: center;
+            -align-items: center;
+        }
+
+        #preview img {
+            width: 800px;
+        }
+
+        #categories {
+            color: gray;
+            font-size: .8em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <input type="file" @change="onFileChange" accept=".jpg,.jpeg,.JPG,.JPEG,.png,.PNG" />
+
+        <div id="preview">
+            <img v-if="url" :src="url" />
+            <pre id="classifications">
+{{ classifications }}
+            </pre>
+            <pre id="categories">
+Categories:                
+{{ categories }}
+            </pre>
+        </div>
+
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                url: null,
+                categories: [],
+                classifications: ['Pick an image']
+            },
+            beforeMount() {
+                this.$http.get('/categories').then((res) => this.categories = res.body);
+            },
+            methods: {
+                onFileChange(e) {
+                    const file = e.target.files[0];
+                    this.url = URL.createObjectURL(file);
+                    let formData = new FormData();
+                    formData.append('file', file);
+
+                    this.classifications = ['Please wait...'];
+                    this.$http.post('/classify', formData).then((res) => {
+                        console.log('Classification done.')
+                        this.classifications = res.body.summary.results;
+                        this.url = res.body.summary.image;
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
