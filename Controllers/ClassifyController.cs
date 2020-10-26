@@ -24,7 +24,7 @@ namespace waoeml.Controllers
         [HttpGet("categories")]
         public IEnumerable<string> Categories()
         {
-            return provider.GetLabels();
+            return provider.GetCategories();
         }
 
         [HttpPost("classify")]

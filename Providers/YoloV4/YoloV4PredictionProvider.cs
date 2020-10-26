@@ -10,16 +10,17 @@ using static Microsoft.ML.Transforms.Image.ImageResizingEstimator;
 
 namespace waoeml.Providers.YoloV4
 {
+    [ProviderFor("YOLOV4")]
     public class YoloV4PredictionProvider : IPredictionProvider
     {
         private readonly PredictionEngine<YoloV4BitmapData, YoloV4Prediction> predictionEngine;
         private readonly string[] allCategories = new string[] { "person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush" };
         private readonly string[] badCategories = new string[] { "person", "bicycle", "car", "motorbike", "bus", "truck" };
         private readonly string[] animalCategories = new string[] { "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear" };
-        private string[] validCategories;
-        private readonly Font font = new Font("Arial", 14);
+        private readonly string[] validCategories;
         private readonly PredictionConfig predictionConfig;
         private readonly ILogger<YoloV4PredictionProvider> logger;
+        private readonly Pen boxPen = new Pen(Color.FromArgb(255, 0, 0, 255), 5);
 
         public YoloV4PredictionProvider(PredictionConfig predictionConfig, ILogger<YoloV4PredictionProvider> logger)
         {
@@ -61,7 +62,7 @@ namespace waoeml.Providers.YoloV4
             this.logger.LogInformation("PredictionEngine ready");
         }
 
-        public IEnumerable<string> GetLabels()
+        public IEnumerable<string> GetCategories()
         {
             return this.validCategories.OrderBy(l => l);
         }
@@ -73,6 +74,7 @@ namespace waoeml.Providers.YoloV4
             var stopWatch = Stopwatch.StartNew();
             var predict = predictionEngine.Predict(new YoloV4BitmapData() { Image = image });
             var results = predict.GetResults(allCategories, 0.3f, 0.7f).Where(r => validCategories.Contains(r.Label)).ToList();
+            stopWatch.Stop();
             this.logger.LogInformation("Prediction ended. Got {} results in {}ms.", results.Count, stopWatch.ElapsedMilliseconds);
 
             // Draw boxes
@@ -85,7 +87,7 @@ namespace waoeml.Providers.YoloV4
                     var x2 = res.BBox[2];
                     var y2 = res.BBox[3];
                     
-                    g.DrawRectangle(Pens.Blue, x1, y1, x2 - x1, y2 - y1);
+                    g.DrawRectangle(boxPen, x1, y1, x2 - x1, y2 - y1);
 
                     // using (var brushes = new SolidBrush(Color.FromArgb(50, Color.Red)))
                     // {

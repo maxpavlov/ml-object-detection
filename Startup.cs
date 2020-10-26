@@ -22,7 +22,6 @@ namespace waoeml
                 .AddEnvironmentVariables()
                 .Build();
 
-
             WebHostEnvironment = env;
         }
 
@@ -30,8 +29,8 @@ namespace waoeml
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<IWebHostEnvironment>(WebHostEnvironment);
+            services.AddSingleton(Configuration);
+            services.AddSingleton(WebHostEnvironment);
             services.AddResponseCompression();
 
             // Resolve and add current provider
@@ -62,11 +61,7 @@ namespace waoeml
 
             app.UseRouting();
             app.UseResponseCompression();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

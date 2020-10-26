@@ -3,32 +3,36 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using waoeml.Providers.Common;
-using waoeml.Providers.YoloV4;
 
 namespace waoeml.Providers
 {
-    public static class Extensions
+    public static class ProviderExtensions
     {
         public static IServiceCollection AddPredictionProvider(this IServiceCollection services)
         {
             // Register config
-            services.AddSingleton<PredictionConfig>();
+            var config = new PredictionConfig();
+            services.AddSingleton(config);
 
             // Resolve provider
-            string provider = Environment.GetEnvironmentVariable("MODEL_PROVIDER");
-            switch (provider)
-            {
-                case "YOLOV4":
-                    services.AddSingleton<IPredictionProvider, YoloV4PredictionProvider>();
-                    break;
-                default:
-                    throw new NotImplementedException($"Provider:{provider} has no implementation.");
-            }
+            var requiredInterfaceType = typeof(IPredictionProvider);
+            var requiredAttributeType = typeof(ProviderForAttribute);
 
+            var providerType = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes())
+                .Where(t => requiredInterfaceType.IsAssignableFrom(t))
+                .Where(t => t.GetCustomAttributes(requiredAttributeType)
+                    .Cast<ProviderForAttribute>()
+                    .Any(a => config.ModelProvider == a.GetName()))
+                .Single();
+
+            services.AddSingleton(requiredInterfaceType, providerType);
             return services;
         }
 

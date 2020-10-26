@@ -6,6 +6,6 @@ namespace waoeml.Providers.Common
     public interface IPredictionProvider
     {
         PredictionSummary Predict(Bitmap image);
-        IEnumerable<string> GetLabels();
+        IEnumerable<string> GetCategories();
     }
 }
