@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.ML.ImageAnalytics" Version="1.5.2" />
     <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="1.5.2" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.5.2" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.5.2" />
   </ItemGroup>
 
 </Project>
