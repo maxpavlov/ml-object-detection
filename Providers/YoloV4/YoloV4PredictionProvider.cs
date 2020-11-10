@@ -20,7 +20,7 @@ namespace waoeml.Providers.YoloV4
         private readonly string[] validCategories;
         private readonly PredictionConfig predictionConfig;
         private readonly ILogger<YoloV4PredictionProvider> logger;
-        private readonly Pen boxPen = new Pen(Color.FromArgb(255, 0, 0, 255), 5);
+        private readonly Pen boxPen = new Pen(Color.FromArgb(255, 255, 255, 255), 3);
 
         public YoloV4PredictionProvider(PredictionConfig predictionConfig, ILogger<YoloV4PredictionProvider> logger)
         {
@@ -82,10 +82,10 @@ namespace waoeml.Providers.YoloV4
             {
                 foreach (var res in results)
                 {
-                    var x1 = res.BBox[0];
-                    var y1 = res.BBox[1];
-                    var x2 = res.BBox[2];
-                    var y2 = res.BBox[3];
+                    var x1 = res.BBox[0] - 20;
+                    var y1 = res.BBox[1] - 20;
+                    var x2 = res.BBox[2] + 20;
+                    var y2 = res.BBox[3] + 20;
                     
                     g.DrawRectangle(boxPen, x1, y1, x2 - x1, y2 - y1);
 

@@ -1,15 +1,18 @@
-ARG DOTNETVERSION=3.1
+ARG DOTNETVERSION=5.0
 
 # Build image
-FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNETVERSION}-alpine AS build-env
-
-# Copy project files (except excluded in .dockerignore) and restore deps
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNETVERSION}-alpine AS build-env
+# Copy csproj and restore
 WORKDIR /app
+COPY *.csproj .
+RUN dotnet restore
+
+# Copy rest (except excluded in .dockerignore)
 COPY . ./
-RUN dotnet publish -c Release -o ./out
+RUN dotnet publish -c Release -o ./out --no-restore
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNETVERSION}
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNETVERSION}
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libgomp1 \
     libgdiplus
