@@ -51,7 +51,9 @@ namespace waoeml.Providers.YoloV4
                         "Identity_1:0",
                         "Identity_2:0"
                     },
-                    modelFile: predictionConfig.ModelFile));
+                    modelFile: predictionConfig.ModelFile, 
+                    fallbackToCpu: true,
+                    gpuDeviceId: null));
             this.logger.LogInformation("Pipline ready");
 
             // Fit on empty list to obtain input data schema
