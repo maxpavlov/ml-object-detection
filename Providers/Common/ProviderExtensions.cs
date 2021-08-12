@@ -24,13 +24,14 @@ namespace waoeml.Providers
             var requiredInterfaceType = typeof(IPredictionProvider);
             var requiredAttributeType = typeof(ProviderForAttribute);
 
-            var providerType = AppDomain.CurrentDomain.GetAssemblies()
+            var providerType = AppDomain.CurrentDomain
+                .GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .Where(t => requiredInterfaceType.IsAssignableFrom(t))
-                .Where(t => t.GetCustomAttributes(requiredAttributeType)
+                .Where(t => requiredInterfaceType
+                    .IsAssignableFrom(t))
+                .Single(t => t.GetCustomAttributes(requiredAttributeType)
                     .Cast<ProviderForAttribute>()
-                    .Any(a => config.ModelProvider == a.GetName()))
-                .Single();
+                    .Any(a => config.ModelProvider == a.GetName()));
 
             services.AddSingleton(requiredInterfaceType, providerType);
             return services;
@@ -38,7 +39,7 @@ namespace waoeml.Providers
 
         public static async Task<Bitmap> AsBitMapAsync(this IFormFile file)
         {
-            using var ms = new MemoryStream();
+            await using var ms = new MemoryStream();
             await file.CopyToAsync(ms);
             return new Bitmap(ms);
         }

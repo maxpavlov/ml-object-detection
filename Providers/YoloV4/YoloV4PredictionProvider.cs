@@ -79,6 +79,8 @@ namespace waoeml.Providers.YoloV4
             stopWatch.Stop();
             this.logger.LogInformation("Prediction ended. Got {} results in {}ms.", results.Count, stopWatch.ElapsedMilliseconds);
 
+            System.Drawing.Font drawFont = new System.Drawing.Font("Arial", 16);
+            
             // Draw boxes
             using (var g = Graphics.FromImage(image))
             {
@@ -91,17 +93,17 @@ namespace waoeml.Providers.YoloV4
                     
                     g.DrawRectangle(boxPen, x1, y1, x2 - x1, y2 - y1);
 
-                    // using (var brushes = new SolidBrush(Color.FromArgb(50, Color.Red)))
-                    // {
-                    //     g.FillRectangle(brushes, x1, y1, x2 - x1, y2 - y1);
-                    // }
-                    // g.DrawString($"{res.Label} {(int)res.Confidence * 100}", this.font, Brushes.Blue, new PointF(x1, y1));
+                    using (var brushes = new SolidBrush(Color.FromArgb(50, Color.Red)))
+                    {
+                        g.FillRectangle(brushes, x1, y1, x2 - x1, y2 - y1);
+                    }
+                    g.DrawString($"{res.Label} {(int)(res.Confidence * 100)}%", drawFont,  Brushes.Blue, new PointF(x1, y1));
                 }
             }
 
             return new PredictionSummary
             {
-                Image = image.Resize(predictionConfig.MaxHeight).AsBase64(),
+                Image = image.AsBase64(),
                 Results = results.Select(r => new PredictionResult
                 {
                     Category = r.Label,

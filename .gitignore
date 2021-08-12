@@ -4,3 +4,5 @@ out/
 Properties/
 .DS_Store
 *.onnx
+.vs/waoeml/xs/UserPrefs.xml
+.vs/waoeml/xs/project-cache/waoeml-Debug.json
