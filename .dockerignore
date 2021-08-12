@@ -1,7 +1,0 @@
-.vscode/
-bin/
-obj/
-out/
-Properties/
-.DS_Store
-*.onnx
