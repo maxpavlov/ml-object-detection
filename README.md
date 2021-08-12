@@ -8,4 +8,7 @@ apt-get update -y && apt-get install -y --no-install-recommends \
 libgomp1 \
 libgdiplus
 
-For MacOS the brew can get you 
+For MacOS the brew can get you:
+
+brew install libomp
+brew install mono-libgdiplus
