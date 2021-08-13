@@ -4,8 +4,5 @@ out/
 Properties/
 .DS_Store
 *.onnx
-.vs/waoeml/xs/UserPrefs.xml
-.vs/waoeml/xs/project-cache/waoeml-Debug.json
-.idea/.idea.waoeml/.idea/workspace.xml
-.idea/.idea.waoeml/.idea/projectSettingsUpdater.xml
-.idea/.idea.waoeml/.idea/indexLayout.xml
+.vs/
+.idea/
