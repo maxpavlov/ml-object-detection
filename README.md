@@ -1,4 +1,4 @@
-# ml-object-detection
+# ml.net-object-detection using YOLOv4
 
 This is a fork of the repo by Andreas Petersson (wootapa on GitHub), re-purposed for demo of ml.net with YOLOv4.
 
