@@ -15,3 +15,6 @@ For MacOS the brew can get you:
 brew install libomp
 brew install mono-libgdiplus
 ```
+
+This solution also relies on YOLOv4 onnx model, thus download: https://github.com/onnx/models/tree/master/vision/object_detection_segmentation/yolov4/model
+and place `yolov4.onnx` within the `/temp/` directory in the `mlnet-object-detection-demo` project. Since ist's a large file, op out from committing it to source control if you decide to fork this repo. 
