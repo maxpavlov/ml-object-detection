@@ -1,3 +1,5 @@
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
+
 # ml.net-object-detection using YOLOv4
 
 This is a fork of the repo by Andreas Petersson (wootapa on GitHub), re-purposed for demo of ml.net with YOLOv4.
